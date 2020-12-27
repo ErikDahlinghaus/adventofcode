@@ -1,7 +1,7 @@
 import csv
 
 entries = []
-with open('input.csv') as file:
+with open('input', 'r') as file:
     entries = [int(row) for row in file.readlines()]
 
 TARGET = 2020
