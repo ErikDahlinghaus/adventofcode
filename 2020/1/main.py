@@ -1,9 +1,8 @@
 import csv
 
 entries = []
-with open('input.csv') as csv_file:
-    csv_reader = csv.reader(csv_file)
-    entries = [int(row[0]) for row in csv_reader]
+with open('input.csv') as file:
+    entries = [int(row) for row in file.readlines()]
 
 TARGET = 2020
 def solve_2(entries):

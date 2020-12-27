@@ -1,4 +1,3 @@
-import csv
 
 def process_line(line):
     remainder, password = line.split(": ")
@@ -7,9 +6,8 @@ def process_line(line):
     return (int(min_required), int(max_required), letter, password)
 
 entries = []
-with open('input.csv') as csv_file:
-    csv_reader = csv.reader(csv_file)
-    entries = [process_line(row[0]) for row in csv_reader]
+with open('input', 'r') as file:
+    entries = [process_line(row) for row in file.readlines()]
 
 def password_policy_1(entries):
     valid_passwords = 0
