@@ -1,31 +1,47 @@
 
-def process_line(line):
-    remainder, password = line.split(": ")
-    remainder, letter = remainder.split(" ")
-    min_required, max_required = remainder.split("-")
-    return (int(min_required), int(max_required), letter, password)
-
-entries = []
+mymap = []
 with open('input', 'r') as file:
-    entries = [process_line(row) for row in file.readlines()]
+    mymap = [row.strip() for row in file.readlines()]
 
-def password_policy_1(entries):
-    valid_passwords = 0
-    for min_required, max_required, letter, password in entries:
-        count = password.count(letter)
-        if min_required <= count <= max_required:
-            valid_passwords = valid_passwords+1
-    return valid_passwords
+TREE = '#'
+SNOW = '.'
 
-def password_policy_2(entries):
-    valid_passwords = 0
-    for index_1, index_2, letter, password in entries:
-        match_1 = password[index_1-1] == letter
-        match_2 = password[index_2-1] == letter
+def count_trees(mymap, slope = [3, 1]):
+    slope_x, slope_y = slope
+    num_trees = 0
+    position_x = 0
+    position_y = 0
 
-        if (not match_1 == match_2) and (match_1 or match_2):
-            valid_passwords = valid_passwords+1
-    return valid_passwords 
+    for position_y in range(0, len(mymap), slope_y):
+        row = mymap[position_y]
 
-print(password_policy_1(entries))
-print(password_policy_2(entries))
+        if position_x >= len(row):
+            position_x = position_x - len(row)
+        
+        cell = row[position_x]
+
+        if cell == TREE:
+            num_trees = num_trees + 1
+
+        position_x = position_x + slope_x
+    
+    return num_trees
+
+
+def check_all_slopes(mymap):
+    slopes = [
+        [1, 1],
+        [3, 1],
+        [5, 1],
+        [7, 1],
+        [1, 2]
+    ]
+    slopes_trees = [count_trees(mymap, slope = slope) for slope in slopes]
+
+    result = 1
+    for num_trees in slopes_trees:
+        result = result * num_trees
+    return result
+
+
+print(check_all_slopes(mymap))
