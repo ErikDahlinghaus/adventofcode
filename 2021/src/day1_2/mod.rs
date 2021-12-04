@@ -1,7 +1,7 @@
 use std::fs;
 
 pub fn main() {
-    let depth_readings = fs::read_to_string("./src/day1_1/input")
+    let depth_readings = fs::read_to_string("./src/day1_2/input")
         .expect("Something went wrong reading the file");
 
     let no_previous = "(N/A - no previous measurement)";
@@ -10,9 +10,21 @@ pub fn main() {
 
     let mut last_depth = 0;
     let mut larger = 0;
+
+    let mut iterator = 0;
+
+    let length = depth_readings.split_terminator("\n").count();
     
     for depth_str in depth_readings.lines() {
-        let depth = depth_str.parse::<i32>().unwrap();
+        if iterator >= length-2 {
+            break;
+        }
+        let depth0 = depth_str.parse::<i32>().unwrap();
+        let depth1 = depth_readings.split_terminator("\n").nth(iterator+1).unwrap().parse::<i32>().unwrap();
+        let depth2 = depth_readings.split_terminator("\n").nth(iterator+2).unwrap().parse::<i32>().unwrap();
+        
+        let depth = depth0 + depth1 + depth2;
+
         if last_depth == 0 {
             println!("{} {}", depth, no_previous);
         } else if last_depth > depth {
@@ -23,7 +35,9 @@ pub fn main() {
         } else {
             println!("depth remained the same");
         }
+
         last_depth = depth;
+        iterator = iterator + 1;
     }
 
     println!("{}", larger)
